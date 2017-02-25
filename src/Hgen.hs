@@ -1,4 +1,4 @@
-module Lib
+module Hgen
     ( Chromosome, K, Input
     ) where
 
