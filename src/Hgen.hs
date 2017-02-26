@@ -1,6 +1,8 @@
 module Hgen
-    ( Chromosome, K, Input
+    ( Chromosome, K, Input, Evaluation, Adaptation, Reproduction, Mutation
     ) where
+
+import System.Random (randomRIO)
 
 type K = Int
 type Input = [ Int ]
@@ -10,4 +12,8 @@ type Reproduction = Input -> Input -> (Input, Input)
 type Mutation = Input -> Input
 data Chromosome = Chromosome Evaluation Adaptation Reproduction Mutation
 
+data Evolution = Evolution Input Chromosome Int Int
 
+start :: Evolution -> [ Input ] -> IO Input
+start (Evolution evaluation adaptation reproduction mutation) inputs =
+  
