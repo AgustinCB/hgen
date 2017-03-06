@@ -1,4 +1,4 @@
-module Population () where
+module Population (Population, Fitness) where
 
 type Fitness a = a -> Double
 data Population a = Population [a] (Fitness a)
