@@ -1,16 +1,22 @@
-module Population (Population, Fitness) where
+module Population (Population, Fitness, Chromosome) where
 
 type Fitness a = a -> Double
-data Population a = Population [a] (Fitness a)
+type Cross a = [a] -> IO a
+type Mutate a = a -> IO a
+
+data Chromosome a = Chromosome { cross :: Cross a
+                               , mutate :: Mutate a
+                               , fitness :: Fitness a }
+data Population a = Population [a] (Chromosome a)
 
 addPopulation :: Population a -> [a] -> Population a
-addPopulation (Population pop fitness) newPop = Population (pop ++ newPop) fitness
+addPopulation (Population pop chromosome) newPop = Population (pop ++ newPop) chromosome
 
 individual :: Population a -> Int -> a
 individual (Population pop _) i = pop!!i
 
 allFitness :: Population a -> [Double]
-allFitness (Population pop fitness) = map fitness pop
+allFitness (Population pop (Chromosome _ _ fitness)) = map fitness pop
 
 totalFitness :: Population a -> Double
 totalFitness pop = sum $ allFitness pop

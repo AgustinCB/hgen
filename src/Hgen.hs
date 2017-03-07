@@ -1,21 +1,22 @@
-module Hgen ( Params, Evolution ) where
+module Hgen ( Params, Evolution, Population, Chromosome ) where
 
 import Population
 
 -- Params Iterations SizePopulation xProbability mProbability
-data Params = Params Int Int Double Double
+data Params = Params { iterations :: Int
+                     , sizePopulation :: Int
+                     , xProbability :: Double
+                     , yProbability :: Double }
 
-class Evolution a where
-  -- user defined
-  cross :: [a] -> IO a
-  mutate :: a -> IO a
+class Evolution population where
   -- default
-  initialization :: Int -> IO (Population a)
-  crossover :: Double -> Population a -> IO (Population a)
-  mutation :: Double -> Population a -> IO (Population a)
-  selection :: Int -> Population a -> IO (Population a)
-  geneticAlg :: Params -> IO (Population a)
+  initialization :: Int -> IO population
+  crossover :: Double -> population -> IO population
+  mutation :: Double -> population -> IO population
+  selection :: Int -> population -> IO population
+  geneticAlg :: Params -> IO population
 
+instance Evolution (Population a) where
   geneticAlg (Params iterations sizePop xPro mPro) = do
     pop <- initialization sizePop
     doit iterations pop
