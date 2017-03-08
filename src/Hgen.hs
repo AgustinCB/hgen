@@ -1,5 +1,8 @@
 module Hgen ( Params, Evolution, Population, Chromosome ) where
 
+import Data.List (sortBy)
+import Data.Ord
+
 import Population
 
 -- Params Iterations SizePopulation xProbability mProbability
@@ -17,6 +20,7 @@ class Evolution population where
   geneticAlg :: Params -> IO population
 
 instance Evolution (Population a) where
+  selection size p = do return (limit (sort p) size)
   geneticAlg (Params iterations sizePop xPro mPro) = do
     pop <- initialization sizePop
     doit iterations pop
