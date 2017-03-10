@@ -1,4 +1,4 @@
-module Hgen ( Params, Evolution, Population, Chromosome ) where
+module Hgen ( Params, Evolution, Population, Chromosome, Fitness, Cross, Mutate, RandomInd, MatingPool ) where
 
 import Data.List (sortBy)
 import Data.Ord
