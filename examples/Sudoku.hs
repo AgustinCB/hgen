@@ -94,9 +94,12 @@ sudokuChromosome = Chromosome crossSudoku mutateSudoku fitnessSudoku randomSudok
 sudokuParams :: Params
 sudokuParams = Params 200 50 0.1
 
-printPop :: Population Solution -> IO ()
-printPop pop = do
-  print "Pooooop!"
+printSolution :: Solution -> IO ()
+printSolution solution = do
+  print $ show solution
+
+printPop :: Population Solution -> IO [()]
+printPop pop = mapM (\s -> (printSolution s)) (population pop)
 
 main :: IO ()
 main = do
