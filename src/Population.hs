@@ -1,4 +1,4 @@
-module Population (Population, Fitness, Cross, Mutate, RandomInd, MatingPool, Chromosome, limit, sort, mutatePopulation, crossPopulation, randomPopulation) where
+module Population (Population(..), Fitness, Cross, Mutate, RandomInd, MatingPool, Chromosome(..), limit, sort, mutatePopulation, crossPopulation, randomPopulation, allFitness, fitnessPairs, size) where
 
 import Data.List (sortBy)
 import Data.Ord
@@ -21,6 +21,9 @@ individual (Population pop _) i = pop!!i
 
 allFitness :: Population a -> [Double]
 allFitness (Population pop (Chromosome _ _ fitness _ _)) = map fitness pop
+
+fitnessPairs :: Population a -> [(a, Double)]
+fitnessPairs p@(Population pop _) = zip pop (allFitness p)
 
 totalFitness :: Population a -> Double
 totalFitness pop = sum $ allFitness pop
