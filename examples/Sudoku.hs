@@ -24,6 +24,7 @@ replace2D f x y = replace (replace f y) x
 
 type Row = [Int]
 type Solution = [Row]
+
 boxSize :: Int
 boxSize = 3
 
@@ -55,6 +56,7 @@ crossByRow solutions = do
     where bestRow pairRows = do
             let fstRow = fst pairRows
             let sndRow = snd pairRows
+            print ("Rows " ++ (show fstRow))
             if (fitnessRow fstRow) > (fitnessRow sndRow) then return fstRow
             else return sndRow
 

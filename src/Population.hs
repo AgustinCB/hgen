@@ -48,12 +48,15 @@ randomFn pop fn prob i = do
 
 mutatePopulation :: Double -> Population a -> IO (Population a)
 mutatePopulation prob p@(Population _ c@(Chromosome _ mutate _ _ _)) = do
+  print "mutate"
   newPop <- (mapM (randomFn p mutate prob) [size p])
+  print "after mutate"
   return (Population newPop c)
 
 crossPopulation :: Population a -> IO (Population a)
 crossPopulation p@(Population _ (Chromosome cross _ _ _ mating)) = do
   matingPool <- mating p
+  print "mating pool"
   children <- mapM cross matingPool
   return $ addPopulation p children
 
