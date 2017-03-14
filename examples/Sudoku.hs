@@ -56,7 +56,6 @@ crossByRow solutions = do
     where bestRow pairRows = do
             let fstRow = fst pairRows
             let sndRow = snd pairRows
-            print ("Rows " ++ (show fstRow))
             if (fitnessRow fstRow) > (fitnessRow sndRow) then return fstRow
             else return sndRow
 

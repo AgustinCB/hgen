@@ -48,15 +48,12 @@ randomFn pop fn prob i = do
 
 mutatePopulation :: Double -> Population a -> IO (Population a)
 mutatePopulation prob p@(Population _ c@(Chromosome _ mutate _ _ _)) = do
-  print "mutate"
-  newPop <- (mapM (randomFn p mutate prob) [size p])
-  print "after mutate"
+  newPop <- (mapM (randomFn p mutate prob) [1..size p])
   return (Population newPop c)
 
 crossPopulation :: Population a -> IO (Population a)
 crossPopulation p@(Population _ (Chromosome cross _ _ _ mating)) = do
   matingPool <- mating p
-  print "mating pool"
   children <- mapM cross matingPool
   return $ addPopulation p children
 
@@ -66,10 +63,10 @@ randomPopulation size (Population _ chromosome) = do
   return (Population pop chromosome)
 
 sort :: Population a -> Population a
-sort (Population pop c@(Chromosome _ _ fitness _ _)) = (Population (sortBy compare pop) c)
+sort (Population pop c@(Chromosome _ _ fitness _ _)) = (Population (pop) c)
   where compare sol1 sol2
-          | (fitness sol1) > (fitness sol2) = GT
-          | (fitness sol2) > (fitness sol1) = LT
+          | (fitness sol1) > (fitness sol2) = LT
+          | (fitness sol2) > (fitness sol1) = GT
           | otherwise                       = EQ
 
 forAll :: (a -> IO a) -> Population a -> IO (Population a)

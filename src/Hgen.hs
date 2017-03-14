@@ -22,16 +22,20 @@ instance Evolution (Population a) where
   initialization size p = randomPopulation size p
   crossover p = crossPopulation p
   mutation prob p = mutatePopulation prob p
-  selection size p = return (limit (sort p) size)
+  selection sizePop p = do
+    print "IN SELECTION"
+    print ("SIZE " ++ (show (size p)))
+    print ("SIZE " ++ (show (size (sort p))))
+    return (limit (sort p) sizePop)
   geneticAlg (Params iterations sizePop mPro) pop = do
     print "Before initialization"
     initPop <- initialization sizePop pop
     print "After initialization"
     print ("iterations " ++ (show iterations))
-    print ("size " ++ (show (size initPop)))
     doit iterations initPop
       where doit n initPop@(Population p _) = do
               print "iteration"
+              print ("size " ++ (show (size initPop)))
               if n == 0 then return initPop
               else
                 crossover initPop >>=
