@@ -17,11 +17,13 @@ class Evolution population where
   mutation :: Double -> population -> IO population
   selection :: Int -> population -> IO population
   geneticAlg :: Params -> population -> IO population
+  showAll :: population -> IO ()
 
 instance Evolution (Population a) where
   initialization size p = randomPopulation size p
   crossover p = crossPopulation p
   mutation prob p = mutatePopulation prob p
+  showAll p = showPopulation p
   selection sizePop p = do
     print "IN SELECTION"
     print ("SIZE " ++ (show (size p)))
