@@ -89,8 +89,11 @@ matingPoolSudoku pop = do
     where solutionProb (solution, fit) = map (\_ -> solution) [1..fit]
           matingPool = concat (map solutionProb (fitnessPairs pop))
 
+showChromosome :: ShowInd Solution
+showChromosome solution = intercalate "\n" (map show solution)
+
 sudokuChromosome :: Chromosome Solution
-sudokuChromosome = Chromosome crossSudoku mutateSudoku fitnessSudoku randomSudoku matingPoolSudoku
+sudokuChromosome = Chromosome crossSudoku mutateSudoku fitnessSudoku randomSudoku matingPoolSudoku showChromosome
 
 sudokuParams :: Params
 sudokuParams = Params 200 50 0.1

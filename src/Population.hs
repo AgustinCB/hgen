@@ -1,4 +1,4 @@
-module Population (Population(..), Fitness, Cross, Mutate, RandomInd, MatingPool, Chromosome(..), limit, sort, mutatePopulation, crossPopulation, randomPopulation, allFitness, fitnessPairs, size, showPopulation) where
+module Population (Population(..), Fitness, Cross, Mutate, RandomInd, MatingPool, ShowInd, Chromosome(..), limit, sort, mutatePopulation, crossPopulation, randomPopulation, allFitness, fitnessPairs, size, showPopulation) where
 
 import Data.List (sortBy, intercalate)
 import Data.Ord
