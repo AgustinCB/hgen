@@ -96,7 +96,7 @@ sudokuChromosome :: Chromosome Solution
 sudokuChromosome = Chromosome crossSudoku mutateSudoku fitnessSudoku randomSudoku matingPoolSudoku showChromosome
 
 sudokuParams :: Params
-sudokuParams = Params 200 50 0.1
+sudokuParams = Params 200 2 0.1
 
 printSolution :: Solution -> IO ()
 printSolution solution = do
