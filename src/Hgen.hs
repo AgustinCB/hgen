@@ -30,13 +30,10 @@ instance Evolution (Population a) where
     print ("SIZE " ++ (show (size (sort p))))
     return (limit (sort p) sizePop)
   geneticAlg (Params iterations sizePop mPro) pop = do
-    print "Before initialization"
     initPop <- initialization sizePop pop
-    print "After initialization"
-    print ("iterations " ++ (show iterations))
     doit iterations initPop
       where doit n initPop@(Population p _) = do
-              print "iteration"
+              print ("iteration " ++ (show (abs (n - 200))))
               print ("size " ++ (show (size initPop)))
               if n == 0 then return initPop
               else
