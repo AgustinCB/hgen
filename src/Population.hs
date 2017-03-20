@@ -3,6 +3,7 @@ module Population (Population(..), Fitness, Cross, Mutate, RandomInd, MatingPool
 import Data.List (sortBy, intercalate)
 import Data.Ord
 import System.Random
+import Debug.Trace
 
 type Fitness a = a -> Double
 type Cross a = [a] -> IO a
@@ -69,6 +70,7 @@ randomPopulation size (Population _ chromosome) = do
   return (Population pop chromosome)
 
 sort :: Population a -> Population a
+sort (Population pop (Chromosome _ _ _ _ _ showSolution)) | trace ("I WANT TO SEE POP" ++ (intercalate "\n" (map showSolution pop))) False = undefined
 sort (Population pop c@(Chromosome _ _ fitness _ _ _)) = (Population (sortBy compare pop) c)
   where compare sol1 sol2
           | (fitness sol1) > (fitness sol2) = LT
