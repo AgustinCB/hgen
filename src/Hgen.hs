@@ -1,7 +1,8 @@
 module Hgen (Params(..), Evolution(..), Population(..), Chromosome(..), Fitness, Cross, Mutate, RandomInd, MatingPool, ShowInd, allFitness, fitnessPairs, size) where
 
-import Data.List (sortBy)
+import Data.List (sortBy, intercalate)
 import Data.Ord
+import Debug.Trace
 
 import Population
 
@@ -24,9 +25,10 @@ instance Evolution (Population a) where
   crossover p = crossPopulation p
   mutation prob p = mutatePopulation prob p
   showAll p = showPopulation p
-  selection sizePop p = do
+  selection sizePop p@(Population pop c) = do
     print "IN SELECTION"
-    print ("SIZE " ++ (show (size p)))
+    print ("SIZE1 " ++ (show (size p)))
+    print ("I WANT TO SEE POP" ++ (intercalate "\n" (map (showInd c) pop)))
     print ("SIZE " ++ (show (size (sort p))))
     return (limit (sort p) sizePop)
   geneticAlg (Params iterations sizePop mPro) pop = do
