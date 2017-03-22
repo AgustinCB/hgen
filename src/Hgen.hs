@@ -28,7 +28,7 @@ instance Evolution (Population a) where
   selection sizePop p@(Population pop c) = do
     print "IN SELECTION"
     print ("SIZE1 " ++ (show (size p)))
-    print ("I WANT TO SEE POP" ++ (intercalate "\n" (map (showInd c) pop)))
+    print ("I WANT TO SEE POP" ++ ((showInd c) (head pop)))
     print ("SIZE " ++ (show (size (sort p))))
     return (limit (sort p) sizePop)
   geneticAlg (Params iterations sizePop mPro) pop = do

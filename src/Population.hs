@@ -55,7 +55,7 @@ randomFn pop fn prob i = do
 
 mutatePopulation :: Double -> Population a -> IO (Population a)
 mutatePopulation prob p@(Population _ c) = do
-  newPop <- (mapM (randomFn p (mutate c) prob) [1..size p])
+  newPop <- (mapM (randomFn p (mutate c) prob) [0..(size p)-1])
   return (Population newPop c)
 
 crossPopulation :: Population a -> IO (Population a)
