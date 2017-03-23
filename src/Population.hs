@@ -23,8 +23,11 @@ individual (Population pop _) i = pop!!i
 
 showPopulation :: Population a -> IO()
 showPopulation (Population pop c) = do
-  let allPops = map (showInd c) pop in
-      print (intercalate "\n" allPops)
+  printPop pop c
+  where printPop [] c = do print ""
+        printPop pop c = do
+          print ((showInd c) (head pop))
+          printPop (tail pop) c
 
 allFitness :: Population a -> [Double]
 allFitness (Population pop chromosome) = map (fitness chromosome) pop
@@ -70,7 +73,7 @@ randomPopulation size (Population _ chromosome) = do
   return (Population pop chromosome)
 
 sort :: Population a -> Population a
-sort (Population pop c@(Chromosome _ _ fitness _ _ showSolution)) = (Population (sortBy compare (trace ("I WANT TO SEE POP" ++ (intercalate "\n" (map showSolution pop))) pop)) c)
+sort (Population pop c@(Chromosome _ _ fitness _ _ showSolution)) = (Population (sortBy compare pop) c)
   where compare sol1 sol2
           | (fitness sol1) > (fitness sol2) = LT
           | (fitness sol2) > (fitness sol1) = GT

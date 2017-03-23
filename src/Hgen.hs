@@ -22,13 +22,16 @@ class Evolution population where
 
 instance Evolution (Population a) where
   initialization size p = randomPopulation size p
-  crossover p = crossPopulation p
+  crossover p = do
+    pop <- crossPopulation p
+    print "POP"
+    showPopulation pop
+    return pop
   mutation prob p = mutatePopulation prob p
   showAll p = showPopulation p
   selection sizePop p@(Population pop c) = do
     print "IN SELECTION"
     print ("SIZE1 " ++ (show (size p)))
-    print ("I WANT TO SEE POP" ++ ((showInd c) (head pop)))
     print ("SIZE " ++ (show (size (sort p))))
     return (limit (sort p) sizePop)
   geneticAlg (Params iterations sizePop mPro) pop = do
