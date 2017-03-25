@@ -52,10 +52,14 @@ crossByColumn solutions = do
 
 crossByRow :: Cross Solution
 crossByRow solutions = do
+  print ("SIZE ROW " ++ (show (length solutions)))
   mapM bestRow $ zip (head solutions) (last solutions)
     where bestRow pairRows = do
             let fstRow = fst pairRows
             let sndRow = snd pairRows
+            print "CACA"
+            print fstRow
+            print sndRow
             if (fitnessRow fstRow) > (fitnessRow sndRow) then return fstRow
             else return sndRow
 
@@ -66,8 +70,12 @@ crossByBox solutions = do
 
 crossSudoku :: Cross Solution
 crossSudoku solutions = do
-  crossMethod <- pick [crossByColumn, crossByRow, crossByBox]
+  crossMethod <- pick [crossByRow]
+  showMethod crossMethod
   crossMethod solutions
+  where showMethod crossByColumn = do print "CROSSBYCOLUMN"
+        showMethod crossByRow = do print "CROSSBYROW"
+        showMethod crossByBox = do print "CROSSBYBOX"
 
 mutateSudoku :: Mutate Solution
 mutateSudoku solution = do

@@ -19,7 +19,7 @@ addPopulation :: Population a -> [a] -> Population a
 addPopulation (Population pop chromosome) newPop = Population (pop ++ newPop) chromosome
 
 individual :: Population a -> Int -> a
-individual (Population pop _) i = pop!!i
+individual (Population pop _) i = pop!!(trace ("I IS " ++ (show i)) i)
 
 showPopulation :: Population a -> IO()
 showPopulation (Population pop c) = do
@@ -63,8 +63,11 @@ mutatePopulation prob p@(Population _ c) = do
 
 crossPopulation :: Population a -> IO (Population a)
 crossPopulation p@(Population _ chromosome) = do
+  print "MATING POOL"
   matingPool <- (matingPool chromosome) p
+  print "CHILDREN"
   children <- mapM (cross chromosome) matingPool
+  print "CONCAT"
   return $ addPopulation p children
 
 randomPopulation :: Int -> Population a -> IO (Population a)

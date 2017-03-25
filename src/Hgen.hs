@@ -23,11 +23,15 @@ class Evolution population where
 instance Evolution (Population a) where
   initialization size p = randomPopulation size p
   crossover p = do
+    print "IN CROSSOVER"
     pop <- crossPopulation p
     print "POP"
     showPopulation pop
     return pop
-  mutation prob p = mutatePopulation prob p
+  mutation prob p = do
+    print "IN MUTATION"
+    pop <- mutatePopulation prob p
+    return pop
   showAll p = showPopulation p
   selection sizePop p@(Population pop c) = do
     print "IN SELECTION"
