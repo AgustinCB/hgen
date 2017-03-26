@@ -11,7 +11,9 @@ pick xs = fmap (xs !!) $ randomRIO (0, length xs - 1)
 pick2 :: Eq a => [a] -> IO [a]
 pick2 xs = do
   one <- pick xs
+  print "ONE "
   two <- pick (filter (/= one) xs)
+  print "TWO"
   return [one, two]
 
 replace :: (a -> a) -> Int -> [a] -> [a]
@@ -53,8 +55,13 @@ crossByColumn solutions = do
 crossByRow :: Cross Solution
 crossByRow solutions = do
   print ("SIZE ROW " ++ (show (length solutions)))
+  print "HEAD"
+  print (show (solutions!!0))
+  print "LAST"
+  print (show (solutions!!1))
   mapM bestRow $ zip (head solutions) (last solutions)
     where bestRow pairRows = do
+            print "??????"
             let fstRow = fst pairRows
             let sndRow = snd pairRows
             print "CACA"
@@ -70,12 +77,11 @@ crossByBox solutions = do
 
 crossSudoku :: Cross Solution
 crossSudoku solutions = do
-  crossMethod <- pick [crossByRow]
-  showMethod crossMethod
+  crossMethod <- pick [crossByRow, crossByBox, crossByColumn]
+  print "PEPEEPEEPE"
+  print (head solutions)
+  print (last solutions)
   crossMethod solutions
-  where showMethod crossByColumn = do print "CROSSBYCOLUMN"
-        showMethod crossByRow = do print "CROSSBYROW"
-        showMethod crossByBox = do print "CROSSBYBOX"
 
 mutateSudoku :: Mutate Solution
 mutateSudoku solution = do

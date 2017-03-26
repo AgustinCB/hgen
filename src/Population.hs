@@ -65,7 +65,7 @@ crossPopulation :: Population a -> IO (Population a)
 crossPopulation p@(Population _ chromosome) = do
   print "MATING POOL"
   matingPool <- (matingPool chromosome) p
-  print "CHILDREN"
+  print ("CHILDREN ")
   children <- mapM (cross chromosome) matingPool
   print "CONCAT"
   return $ addPopulation p children
