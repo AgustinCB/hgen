@@ -47,9 +47,6 @@ average pop = (totalFitness pop) / (fromIntegral (size pop))
 size :: Population a -> Int
 size (Population pop _) = length pop
 
-limit :: Population a -> Int -> Population a
-limit (Population pop c) size = (Population (take size pop) c)
-
 randomFn :: Population a -> (a -> IO a) -> Double -> Int -> IO a
 randomFn pop fn prob i = do
   res <- randomIO :: IO Double
@@ -71,6 +68,9 @@ randomPopulation :: Int -> Population a -> IO (Population a)
 randomPopulation size (Population _ chromosome) = do
   pop <- mapM (randomInd chromosome) [0..size-1]
   return (Population pop chromosome)
+
+limit :: Population a -> Int -> Population a
+limit (Population pop c) size = (Population (take size pop) c)
 
 sort :: Population a -> Population a
 sort (Population pop c@(Chromosome _ _ fitness _ _ showSolution)) = (Population (sortBy compare pop) c)

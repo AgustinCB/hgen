@@ -93,12 +93,6 @@ randomSudoku _ = do
 
 matingPoolSudoku :: MatingPool Solution
 matingPoolSudoku pop = do
-  test <- pick2 matingPool
-  print ("TEST SIZE MATING POOL " ++ (show (length matingPool)))
-  print ("TEST FIRST MATING POOL " ++ (show (head matingPool)))
-  print ("TEST FIRST MATING POOL " ++ (show (last matingPool)))
-  print ("TEST SIZE PICK2 " ++ (show (length (nub matingPool))))
-  print ("TEST PICK2 " ++ (show test))
   mapM (\_ -> (pick2 matingPool)) [1..(size pop)]
     where solutionProb (solution, fit) = map (\_ -> solution) [1..fit]
           matingPool = concat (map solutionProb (fitnessPairs pop))
@@ -124,5 +118,6 @@ main :: IO ()
 main = do
   print "Starting!!!"
   pop <- geneticAlg sudokuParams (Population [] sudokuChromosome)
-  printPop pop
+  print "And the winer is:"
+  printPop $ getBetter pop
   print "Ending!!!"

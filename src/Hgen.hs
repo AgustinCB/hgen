@@ -18,6 +18,7 @@ class Evolution population where
   mutation :: Double -> population -> IO population
   selection :: Int -> population -> IO population
   geneticAlg :: Params -> population -> IO population
+  getBetter :: population -> population
   showAll :: population -> IO ()
 
 instance Evolution (Population a) where
@@ -25,8 +26,9 @@ instance Evolution (Population a) where
   crossover p = crossPopulation p
   mutation prob p = mutatePopulation prob p
   showAll p = showPopulation p
-  selection sizePop p@(Population pop c) = do
+  selection sizePop p@(Population _ c) = do
     return (limit (sort p) sizePop)
+  getBetter p@(Population _ c) = (limit (sort p) (fromIntegral 1 :: Int))
   geneticAlg (Params iterations sizePop mPro) pop = do
     initPop <- initialization sizePop pop
     showPopulation initPop
