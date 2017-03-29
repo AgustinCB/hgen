@@ -31,7 +31,6 @@ instance Evolution (Population a) where
   getBetter p@(Population _ c) = (limit (sort p) (fromIntegral 1 :: Int))
   geneticAlg (Params iterations sizePop mPro) pop = do
     initPop <- initialization sizePop pop
-    showPopulation initPop
     doit iterations initPop
       where doit n initPop@(Population p _) = do
               if n == 0 then return initPop

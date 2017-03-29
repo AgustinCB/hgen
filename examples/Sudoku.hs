@@ -48,10 +48,13 @@ transposeByBox :: Solution -> Solution
 transposeByBox solution = map (boxAt solution) [0..(length solution)-1]
 
 fitnessRow :: Row -> Int
-fitnessRow row = (length.nub) row
+fitnessRow row = ((length.nub) row) - 1
 
 fitnessSudoku :: Fitness Solution
-fitnessSudoku solution = fromIntegral $ sum $ map fitnessRow solution
+fitnessSudoku solution =
+                    (fromIntegral $ sum $ map fitnessRow solution) +
+                    (fromIntegral $ sum $ map fitnessRow (transpose solution)) +
+                    (fromIntegral $ sum $ map fitnessRow (transposeByBox solution))
 
 crossByColumn :: Cross Solution
 crossByColumn solutions = do
@@ -104,7 +107,7 @@ sudokuChromosome :: Chromosome Solution
 sudokuChromosome = Chromosome crossSudoku mutateSudoku fitnessSudoku randomSudoku matingPoolSudoku showChromosome
 
 sudokuParams :: Params
-sudokuParams = Params 200 50 0.1
+sudokuParams = Params 500 50 0.1
 
 printPop :: Population Solution -> IO ()
 printPop (Population pop c) = do
@@ -119,5 +122,6 @@ main = do
   print "Starting!!!"
   pop <- geneticAlg sudokuParams (Population [] sudokuChromosome)
   print "And the winer is:"
-  printPop $ getBetter pop
+  print (show (head (population pop)))
+  print (show (fitnessSudoku (head (population pop))))
   print "Ending!!!"
