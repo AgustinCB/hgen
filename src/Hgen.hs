@@ -33,6 +33,7 @@ instance Evolution (Population a) where
     initPop <- initialization sizePop pop
     doit iterations initPop
       where doit n initPop@(Population p _) = do
+              print ("ITERATION " ++ (show n))
               if n == 0 then return initPop
               else
                 crossover initPop >>=

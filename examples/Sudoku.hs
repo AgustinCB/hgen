@@ -3,6 +3,7 @@ module Main where
 import Hgen
 import Data.List
 import Data.Maybe
+import Debug.Trace
 import System.Random (randomRIO)
 
 pick :: [a] -> Maybe (IO a)
@@ -44,6 +45,25 @@ boxAt solution i = map (intAt solution) [(a + x, b + y) | x <- [0..boxSize-1], y
   where a = (quot i 3) * 3
         b = (mod i 3) * 3
 
+problem = [((0, 3), 2), ((0, 4), 6), ((0, 6), 7), ((0, 8), 1),
+  ((1, 0), 6), ((1, 1), 8), ((0, 4), 7), ((1, 7), 9),
+  ((2, 0), 1), ((2, 1), 9), ((2, 5), 4), ((2, 6), 5),
+  ((3, 0), 8), ((3, 1), 2), ((3, 3), 1), ((3, 7), 4),
+  ((4, 2), 4), ((4, 3), 6), ((4, 5), 2), ((4, 6), 9),
+  ((5, 1), 5), ((5, 5), 3), ((5, 7), 2), ((5, 8), 8),
+  ((6, 2), 9), ((6, 3), 3), ((6, 7), 7), ((6, 8), 4),
+  ((7, 1), 4), ((7, 4), 5), ((7, 7), 3), ((7, 8), 6),
+  ((8, 0), 7), ((8, 2), 3), ((8, 4), 1), ((8, 5), 8)]
+
+possiblePositions = [(x, y) | x <- [0..8], y <- [0..8]]
+lockedPositions = map fst problem
+availablePositions = filter isPositionAvailable possiblePositions
+  where isPositionAvailable pos = not $ elem pos lockedPositions
+
+fitToProblem :: Solution -> Solution
+fitToProblem solution = foldl updatePosition solution problem
+  where updatePosition sol ((x, y), val) = let fit = replace2D (const val) x y sol in (trace ("FITTTTING " ++ (show x) ++ " " ++ (show y) ++ " " ++ (show val) ++ " " ++ (show fit) ++ " " ++ (show solution)) fit)
+
 transposeByBox :: Solution -> Solution
 transposeByBox solution = map (boxAt solution) [0..(length solution)-1]
 
@@ -78,18 +98,22 @@ crossByBox solutions = do
 crossSudoku :: Cross Solution
 crossSudoku solutions = do
   crossMethod <- pickVal [crossByRow, crossByBox, crossByColumn]
-  crossMethod solutions
+  child <- crossMethod solutions
+  print ("CHILD " ++ (show child))
+  print ("FITTED CHILD " ++ (show $ fitToProblem child))
+  return $ fitToProblem child
 
 mutateSudoku :: Mutate Solution
 mutateSudoku solution = do
   newVal <- pickVal [1..l]
-  pos <- pickVal [(x, y) | x <- [0..l-1], y <- [0..l-1]]
+  pos <- pickVal availablePositions
   return $ replace2D (const newVal) (fst pos) (snd pos) solution
     where l = (length solution)
 
 randomSudoku :: RandomInd Solution
 randomSudoku _ = do
-  mapM randomRow [1..l]
+  sol <- mapM randomRow [1..l]
+  return $ fitToProblem sol
     where l = boxSize * boxSize
           possibilities = [1..l]
           randomRow _ = mapM (\i -> pickVal possibilities) [1..l]
@@ -107,7 +131,7 @@ sudokuChromosome :: Chromosome Solution
 sudokuChromosome = Chromosome crossSudoku mutateSudoku fitnessSudoku randomSudoku matingPoolSudoku showChromosome
 
 sudokuParams :: Params
-sudokuParams = Params 500 50 0.1
+sudokuParams = Params 4 1 0.2
 
 printPop :: Population Solution -> IO ()
 printPop (Population pop c) = do
