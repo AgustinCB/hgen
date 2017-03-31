@@ -46,7 +46,7 @@ boxAt solution i = map (intAt solution) [(a + x, b + y) | x <- [0..boxSize-1], y
         b = (mod i 3) * 3
 
 problem = [((0, 3), 2), ((0, 4), 6), ((0, 6), 7), ((0, 8), 1),
-  ((1, 0), 6), ((1, 1), 8), ((0, 4), 7), ((1, 7), 9),
+  ((1, 0), 6), ((1, 1), 8), ((1, 4), 7), ((1, 7), 9),
   ((2, 0), 1), ((2, 1), 9), ((2, 5), 4), ((2, 6), 5),
   ((3, 0), 8), ((3, 1), 2), ((3, 3), 1), ((3, 7), 4),
   ((4, 2), 4), ((4, 3), 6), ((4, 5), 2), ((4, 6), 9),
@@ -62,7 +62,7 @@ availablePositions = filter isPositionAvailable possiblePositions
 
 fitToProblem :: Solution -> Solution
 fitToProblem solution = foldl updatePosition solution problem
-  where updatePosition sol ((x, y), val) = let fit = replace2D (const val) x y sol in (trace ("FITTTTING " ++ (show x) ++ " " ++ (show y) ++ " " ++ (show val) ++ " " ++ (show fit) ++ " " ++ (show solution)) fit)
+  where updatePosition sol ((x, y), val) = let fit = replace2D (const val) x y sol in fit
 
 transposeByBox :: Solution -> Solution
 transposeByBox solution = map (boxAt solution) [0..(length solution)-1]
@@ -99,8 +99,6 @@ crossSudoku :: Cross Solution
 crossSudoku solutions = do
   crossMethod <- pickVal [crossByRow, crossByBox, crossByColumn]
   child <- crossMethod solutions
-  print ("CHILD " ++ (show child))
-  print ("FITTED CHILD " ++ (show $ fitToProblem child))
   return $ fitToProblem child
 
 mutateSudoku :: Mutate Solution
@@ -131,7 +129,7 @@ sudokuChromosome :: Chromosome Solution
 sudokuChromosome = Chromosome crossSudoku mutateSudoku fitnessSudoku randomSudoku matingPoolSudoku showChromosome
 
 sudokuParams :: Params
-sudokuParams = Params 4 1 0.2
+sudokuParams = Params 600 100 0.3
 
 printPop :: Population Solution -> IO ()
 printPop (Population pop c) = do
